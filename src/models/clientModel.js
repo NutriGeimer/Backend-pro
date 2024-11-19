@@ -1,15 +1,14 @@
 class clientModel {
-    constructor(id, name, username, email, phone, info, password, role, image ) {
-        this.id = id
-        this.name = name
-        this.username = username
-        this.email = email
-        this.phone = phone
-        this.info = info
-        this.password = password
-        this.role = role
-        this.image = image
+    constructor(id, fullname, username, email, phone, address, image, payment_method) {
+        this.id = id;
+        this.fullname = fullname;
+        this.username = username;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.image = image;
+        this.payment_method = payment_method; // Tarjeta u otros métodos
     }
 }
 
-export default clientModel
+export default clientModel;
