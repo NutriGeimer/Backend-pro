@@ -1,5 +1,12 @@
 import express from 'express';
-import { addRental, updateRental, deleteRental, getRentalById, getRentalsByClient, getRentalsByCar } from '../controller/rentalController.js';
+import {
+    addRental,
+    updateRental,
+    deleteRental,
+    getRentalById,
+    getRentalsByClient,
+    getRentalsByCar,
+} from '../controller/rentalController.js';
 
 const router = express.Router();
 

@@ -3,6 +3,11 @@ import rentalModel from '../models/rentalModel.js';
 
 class rentalRepo {
     async addRental(data) {
+        // Valida que los datos requeridos existan
+        if (!data.clientId || !data.carId) {
+            throw new Error('Missing required fields: clientId or carId');
+        }
+
         const rental = await db.collection('rentals').add({
             clientId: data.clientId,
             carId: data.carId,
@@ -14,20 +19,24 @@ class rentalRepo {
             totalAmount: data.totalAmount,
             status: data.status,
         });
+
         return rental.id;
     }
 
     async updateRental(id, data) {
+        if (!id) throw new Error('Rental ID is required');
         await db.collection('rentals').doc(id).update(data);
     }
 
     async deleteRental(id) {
+        if (!id) throw new Error('Rental ID is required');
         await db.collection('rentals').doc(id).delete();
     }
 
     async getRentalById(id) {
         const doc = await db.collection('rentals').doc(id).get();
         if (!doc.exists) return null;
+
         const data = doc.data();
         return new rentalModel(
             doc.id,

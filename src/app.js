@@ -1,25 +1,34 @@
-import express from 'express'
-import dotenv from 'dotenv'
-import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js'
-import rateLimitMiddleware from './middleware/rateLimitMiddleware.js'
-import routes from './routes/index.js'
-import cors from 'cors'
+import express from 'express';
+import dotenv from 'dotenv';
+import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
+import rateLimitMiddleware from './middleware/rateLimitMiddleware.js';
+import routes from './routes/index.js';
+import cors from 'cors';
 
-dotenv.config()
+// Cargar variables de entorno
+dotenv.config();
 
+// Configuración de CORS
 const corsOptions = {
     origin: '*',
-    optionsSuccessStatus: 200
-}
+    optionsSuccessStatus: 200,
+};
 
-const app = express()
-app.use(express.json())
-app.use(rateLimitMiddleware)
-app.use(cors(corsOptions))
-app.use('/api/v1', routes)
-app.use(errorHandlerMiddleware)
+const app = express();
 
-const PORT = process.env.PORT || 3020
+// Middlewares
+app.use(express.json());
+app.use(rateLimitMiddleware);
+app.use(cors(corsOptions));
+
+// Rutas principales
+app.use('/api/v1', routes);
+
+// Middleware de manejo de errores
+app.use(errorHandlerMiddleware);
+
+// Iniciar el servidor
+const PORT = process.env.PORT || 3020;
 app.listen(PORT, () => {
-    console.log(` 🚀 Server running on port:  ${PORT}`)
-})
+    console.log(`🚀 Server running on port: ${PORT}`);
+});

@@ -5,6 +5,11 @@ const RentalRepo = new rentalRepo();
 
 class rentalService {
     async addRental(data) {
+        // Validar campos obligatorios
+        if (!data.clientId || !data.carId) {
+            throw new Error('ClientId and CarId are required');
+        }
+
         const newRental = new rentalModel(
             null,
             data.clientId,
@@ -15,20 +20,21 @@ class rentalService {
             data.dropoffAddress,
             data.paymentMethod,
             data.totalAmount,
-            "active" // Estado inicial: activa
+            'active' // Estado inicial
         );
+
         return await RentalRepo.addRental(newRental);
     }
 
     async updateRental(id, data) {
         const rental = await RentalRepo.getRentalById(id);
-        if (!rental) throw new Error("Rental not found");
+        if (!rental) throw new Error('Rental not found');
         await RentalRepo.updateRental(id, data);
     }
 
     async deleteRental(id) {
         const rental = await RentalRepo.getRentalById(id);
-        if (!rental) throw new Error("Rental not found");
+        if (!rental) throw new Error('Rental not found');
         await RentalRepo.deleteRental(id);
     }
 

@@ -1,3 +1,12 @@
+import bcrypt from 'bcrypt';
+import path from 'path';
+import fs from 'fs';
+import clientRepo from '../logic/clientRepo.js';
+import clientModel from '../models/clientModel.js';
+
+const ClientRepo = new clientRepo(); // Inicialización del repositorio
+const saltRounds = 10;
+
 class clientService {
     async addClient(data, file) {
         const existClient = await ClientRepo.getClientByUsername(data.username);

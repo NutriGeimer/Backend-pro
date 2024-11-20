@@ -20,7 +20,7 @@ router.post(
     //authMiddleware,
     upload.single('image'),
     [
-        check('name').notEmpty().withMessage('Name is required'),
+        check('fullname').notEmpty().withMessage('Name is required'),
         check('username').notEmpty().withMessage('Username is required'),
         check('password').isLength({min: 6}).withMessage('Password must be at least 6 characters long'),
     ],
