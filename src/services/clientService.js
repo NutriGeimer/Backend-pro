@@ -57,6 +57,10 @@ class clientService {
         return await ClientRepo.getAllClients();
     }
 
+    async deleteClient(id) {
+        await ClientRepo.deleteClient(id);
+    }
+
     async getClientById(id) {
         return await ClientRepo.getClientById(id);
     }
