@@ -1,16 +1,16 @@
 import bcrypt from 'bcrypt';
-import path from 'path';
-import fs from 'fs';
 import clientRepo from '../logic/clientRepo.js';
 import clientModel from '../models/clientModel.js';
 
-const ClientRepo = new clientRepo(); // Inicialización del repositorio
+const ClientRepo = new clientRepo();
 const saltRounds = 10;
 
 class clientService {
     async addClient(data, file) {
         const existClient = await ClientRepo.getClientByUsername(data.username);
         if (existClient) throw new Error('Username already exists');
+
+        const hashedPassword = await bcrypt.hash(data.password, saltRounds);
 
         const newClient = new clientModel(
             null,
@@ -19,8 +19,10 @@ class clientService {
             data.email,
             data.phone,
             data.address,
+            data.city,
             null,
-            data.payment_method
+            data.paymentMethod,
+            hashedPassword // Contraseña cifrada
         );
 
         const clientId = await ClientRepo.addClient(newClient);
@@ -37,6 +39,10 @@ class clientService {
         const existClient = await ClientRepo.getClientById(id);
         if (!existClient) throw new Error('Client not found');
 
+        if (data.password) {
+            data.password = await bcrypt.hash(data.password, saltRounds);
+        }
+
         if (file) {
             const image = `${id}_image.png`;
             const imagePath = path.join('src', 'clientImages', image);
@@ -45,12 +51,6 @@ class clientService {
         }
 
         await ClientRepo.updateClient(id, data);
-    }
-
-    async deleteClient(id) {
-        const existClient = await ClientRepo.getClientById(id);
-        if (!existClient) throw new Error('Client not found');
-        await ClientRepo.deleteClient(id);
     }
 
     async getAllClients() {
@@ -63,6 +63,23 @@ class clientService {
 
     async getClientByUsername(username) {
         return await ClientRepo.getClientByUsername(username);
+    }
+
+    async updateFavoriteCars(clientId, favoriteCarId, action) {
+        const client = await ClientRepo.getClientById(clientId);
+        if (!client) throw new Error('Client not found');
+
+        let updatedFavorites = client.favoriteCars;
+
+        if (action === 'add') {
+            if (!updatedFavorites.includes(favoriteCarId)) {
+                updatedFavorites.push(favoriteCarId);
+            }
+        } else if (action === 'remove') {
+            updatedFavorites = updatedFavorites.filter((id) => id !== favoriteCarId);
+        }
+
+        await ClientRepo.updateFavoriteCars(clientId, updatedFavorites);
     }
 }
 

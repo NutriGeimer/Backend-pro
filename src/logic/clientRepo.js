@@ -9,8 +9,11 @@ class clientRepo {
             email: data.email,
             phone: data.phone,
             address: data.address,
+            city: data.city,
             image: data.image,
-            payment_method: data.payment_method,
+            paymentMethod: data.paymentMethod,
+            password: data.password, // Contraseña cifrada
+            favoriteCars: data.favoriteCars || [], // Lista vacía por defecto
         });
         return client.id;
     }
@@ -36,8 +39,11 @@ class clientRepo {
                     data.email,
                     data.phone,
                     data.address,
+                    data.city,
                     data.image,
-                    data.payment_method
+                    data.paymentMethod,
+                    data.password,
+                    data.favoriteCars
                 )
             );
         });
@@ -55,15 +61,18 @@ class clientRepo {
             data.email,
             data.phone,
             data.address,
+            data.city,
             data.image,
-            data.payment_method
+            data.paymentMethod,
+            data.password,
+            data.favoriteCars
         );
     }
 
     async getClientByUsername(username) {
-        const client = await db.collection('clients').where('username', '==', username).get();
-        if (client.empty) return null;
-        const doc = client.docs[0];
+        const query = await db.collection('clients').where('username', '==', username).get();
+        if (query.empty) return null;
+        const doc = query.docs[0];
         const data = doc.data();
         return new clientModel(
             doc.id,
@@ -72,9 +81,16 @@ class clientRepo {
             data.email,
             data.phone,
             data.address,
+            data.city,
             data.image,
-            data.payment_method
+            data.paymentMethod,
+            data.password,
+            data.favoriteCars
         );
+    }
+
+    async updateFavoriteCars(clientId, favoriteCars) {
+        await db.collection('clients').doc(clientId).update({ favoriteCars });
     }
 }
 

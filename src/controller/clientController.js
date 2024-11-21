@@ -106,6 +106,38 @@ const getClientByUsername = async (req, res) => {
     }
 };
 
+const updateFavoriteCars = async (req, res) => {
+    try {
+        const { clientId, carId, action } = req.body;
+        await ClientService.updateFavoriteCars(clientId, carId, action);
+        res.status(200).json({
+            success: true,
+            message: `Favorite car ${action === 'add' ? 'added' : 'removed'} successfully.`,
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+const getFavoritesByClient = async (req, res) => {
+    try {
+        const clientId = req.params.clientId;
+        const favorites = await ClientService.getFavoritesByClient(clientId);
+        res.status(200).json({
+            success: true,
+            favorites,
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
 export {
     addClient,
     updateClient,
@@ -113,4 +145,6 @@ export {
     getAllClients,
     getClientById,
     getClientByUsername,
+    updateFavoriteCars,
+    getFavoritesByClient,
 };
