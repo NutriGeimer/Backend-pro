@@ -9,6 +9,7 @@ class carRepo {
             capacity: data.capacity,
             gas: data.gas,
             transmission: data.transmission,
+            image: data.image || null, // Campo opcional para la imagen
         });
         return car.id;
     }
@@ -33,7 +34,8 @@ class carRepo {
                     data.type,
                     data.capacity,
                     data.gas,
-                    data.transmission
+                    data.transmission,
+                    data.image
                 )
             );
         });
@@ -50,88 +52,33 @@ class carRepo {
             data.type,
             data.capacity,
             data.gas,
-            data.transmission
+            data.transmission,
+            data.image
         );
     }
 
     async getCarByBrand(brand) {
-        const query = await db.collection('cars').where('brand', '==', brand).get();
-        const cars = [];
-        query.forEach((doc) => {
-            const data = doc.data();
-            cars.push(
-                new carModel(
-                    doc.id,
-                    data.brand,
-                    data.type,
-                    data.capacity,
-                    data.gas,
-                    data.transmission
-                )
-            );
-        });
-        return cars;
+        return await this._getCarByField('brand', brand);
     }
 
     async getCarByType(type) {
-        const query = await db.collection('cars').where('type', '==', type).get();
-        const cars = [];
-        query.forEach((doc) => {
-            const data = doc.data();
-            cars.push(
-                new carModel(
-                    doc.id,
-                    data.brand,
-                    data.type,
-                    data.capacity,
-                    data.gas,
-                    data.transmission
-                )
-            );
-        });
-        return cars;
+        return await this._getCarByField('type', type);
     }
 
     async getCarByCapacity(capacity) {
-        const query = await db.collection('cars').where('capacity', '==', capacity).get();
-        const cars = [];
-        query.forEach((doc) => {
-            const data = doc.data();
-            cars.push(
-                new carModel(
-                    doc.id,
-                    data.brand,
-                    data.type,
-                    data.capacity,
-                    data.gas,
-                    data.transmission
-                )
-            );
-        });
-        return cars;
+        return await this._getCarByField('capacity', capacity);
     }
 
     async getCarByGas(gas) {
-        const query = await db.collection('cars').where('gas', '==', gas).get();
-        const cars = [];
-        query.forEach((doc) => {
-            const data = doc.data();
-            cars.push(
-                new carModel(
-                    doc.id,
-                    data.brand,
-                    data.type,
-                    data.capacity,
-                    data.gas,
-                    data.transmission
-                )
-            );
-        });
-        return cars;
+        return await this._getCarByField('gas', gas);
     }
 
     async getCarByTransmission(transmission) {
-        const query = await db.collection('cars').where('transmission', '==', transmission).get();
+        return await this._getCarByField('transmission', transmission);
+    }
+
+    async _getCarByField(field, value) {
+        const query = await db.collection('cars').where(field, '==', value).get();
         const cars = [];
         query.forEach((doc) => {
             const data = doc.data();
@@ -142,7 +89,8 @@ class carRepo {
                     data.type,
                     data.capacity,
                     data.gas,
-                    data.transmission
+                    data.transmission,
+                    data.image
                 )
             );
         });

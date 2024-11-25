@@ -1,7 +1,6 @@
 import express from 'express';
-import authMiddleware from '../middleware/authMiddleware.js';
+import multer from 'multer';
 import { check } from 'express-validator';
-
 import {
     addCar,
     updateCar,
@@ -16,9 +15,11 @@ import {
 } from '../controller/carController.js';
 
 const router = express.Router();
+const upload = multer({ storage: multer.memoryStorage() });
 
 router.post(
     '/add',
+    upload.single('image'),
     [
         check('brand').notEmpty().withMessage('Brand is required'),
         check('type').notEmpty().withMessage('Type is required'),
@@ -29,7 +30,7 @@ router.post(
     addCar
 );
 
-router.put('/update/:id', updateCar);
+router.put('/update/:id', upload.single('image'), updateCar);
 router.delete('/delete/:id', deleteCar);
 router.get('/all', getAllCars);
 router.get('/id/:id', getCarById);

@@ -1,22 +1,45 @@
 import carRepo from '../logic/carRepo.js';
 import carModel from '../models/carModel.js';
+import fs from 'fs';
+import path from 'path';
 
 const CarRepo = new carRepo();
 
 class carService {
-    async addCar(data) {
+    async addCar(data, file) {
         const newCar = new carModel(
             null,
             data.brand,
             data.type,
             data.capacity,
             data.gas,
-            data.transmission
+            data.transmission,
+            null
         );
-        return await CarRepo.addCar(newCar);
+
+        const carId = await CarRepo.addCar(newCar);
+
+        if (file) {
+            const image = `${carId}_image.png`;
+            const imagePath = path.join('src', 'carImages', image);
+            fs.writeFileSync(imagePath, file.buffer);
+            await CarRepo.updateCar(carId, { image });
+        }
+
+        return carId;
     }
 
-    async updateCar(id, data) {
+    async updateCar(id, data, file) {
+        const car = await CarRepo.getCarById(id);
+        if (!car) throw new Error('Car not found');
+
+        if (file) {
+            const image = `${id}_image.png`;
+            const imagePath = path.join('src', 'carImages', image);
+            fs.writeFileSync(imagePath, file.buffer);
+            data.image = image;
+        }
+
         await CarRepo.updateCar(id, data);
     }
 
