@@ -6,6 +6,7 @@ import {
     getRentalById,
     getRentalsByClient,
     getRentalsByCar,
+    getAllRentals, 
 } from '../controller/rentalController.js';
 
 const router = express.Router();
@@ -16,5 +17,6 @@ router.delete('/delete/:id', deleteRental);
 router.get('/id/:id', getRentalById);
 router.get('/client/:clientId', getRentalsByClient);
 router.get('/car/:carId', getRentalsByCar);
+router.get('/all', getAllRentals); 
 
 export default router;

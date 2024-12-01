@@ -102,6 +102,21 @@ const getRentalsByCar = async (req, res) => {
     }
 };
 
+const getAllRentals = async (req, res) => { // Add this function
+    try {
+        const rentals = await RentalService.getAllRentals();
+        res.status(200).json({
+            success: true,
+            rentals,
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
 export {
     addRental,
     updateRental,
@@ -109,4 +124,5 @@ export {
     getRentalById,
     getRentalsByClient,
     getRentalsByCar,
+    getAllRentals, // Add this line
 };

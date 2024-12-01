@@ -5,7 +5,6 @@ const RentalRepo = new rentalRepo();
 
 class rentalService {
     async addRental(data) {
-        // Validar campos obligatorios
         if (!data.clientId || !data.carId) {
             throw new Error('ClientId and CarId are required');
         }
@@ -20,7 +19,7 @@ class rentalService {
             data.dropoffAddress,
             data.paymentMethod,
             data.totalAmount,
-            'active' // Estado inicial
+            'active'
         );
 
         return await RentalRepo.addRental(newRental);
@@ -48,6 +47,10 @@ class rentalService {
 
     async getRentalsByCar(carId) {
         return await RentalRepo.getRentalsByCar(carId);
+    }
+
+    async getAllRentals() { // Add this function
+        return await RentalRepo.getAllRentals();
     }
 }
 

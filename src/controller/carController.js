@@ -44,14 +44,11 @@ const getAllCars = async (req, res) => {
     }
 };
 
-// Obtener un carro por ID
+// Obtener carro por ID
 const getCarById = async (req, res) => {
     try {
         const id = req.params.id;
         const car = await CarService.getCarById(id);
-        if (!car) {
-            return res.status(404).json({ success: false, message: 'Car not found' });
-        }
         res.status(200).json({ success: true, car });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
@@ -113,6 +110,50 @@ const getCarByTransmission = async (req, res) => {
     }
 };
 
+// Obtener carros por nombre
+const getCarByName = async (req, res) => {
+    try {
+        const carName = req.params.carName;
+        const cars = await CarService.getCarByName(carName);
+        res.status(200).json({ success: true, cars });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+};
+
+// Obtener carros por modelo
+const getCarByModel = async (req, res) => {
+    try {
+        const carModel = req.params.carModel;
+        const cars = await CarService.getCarByModel(carModel);
+        res.status(200).json({ success: true, cars });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+};
+
+// Obtener carros por color
+const getCarByColor = async (req, res) => {
+    try {
+        const carColor = req.params.carColor;
+        const cars = await CarService.getCarByColor(carColor);
+        res.status(200).json({ success: true, cars });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+};
+
+// Obtener carros por año
+const getCarByYear = async (req, res) => {
+    try {
+        const carYear = req.params.carYear;
+        const cars = await CarService.getCarByYear(carYear);
+        res.status(200).json({ success: true, cars });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+};
+
 export {
     addCar,
     updateCar,
@@ -124,4 +165,8 @@ export {
     getCarByCapacity,
     getCarByGas,
     getCarByTransmission,
+    getCarByName,
+    getCarByModel,
+    getCarByColor,
+    getCarByYear,
 };

@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
 import clientRepo from '../logic/clientRepo.js';
 import clientModel from '../models/clientModel.js';
+import fs from 'fs';
+import path from 'path';
 
 const ClientRepo = new clientRepo();
 const saltRounds = 10;

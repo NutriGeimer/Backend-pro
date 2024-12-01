@@ -9,12 +9,18 @@ class carService {
     async addCar(data, file) {
         const newCar = new carModel(
             null,
+            data.carName,
+            data.carModel,
             data.brand,
             data.type,
             data.capacity,
             data.gas,
             data.transmission,
-            null
+            null,
+            data.rentPrice,
+            data.carColor,
+            data.carDescription,
+            data.carYear
         );
 
         const carId = await CarRepo.addCar(newCar);
@@ -73,6 +79,22 @@ class carService {
 
     async getCarByTransmission(transmission) {
         return await CarRepo.getCarByTransmission(transmission);
+    }
+
+    async getCarByName(carName) {
+        return await CarRepo.getCarByName(carName);
+    }
+
+    async getCarByModel(carModel) {
+        return await CarRepo.getCarByModel(carModel);
+    }
+
+    async getCarByColor(carColor) {
+        return await CarRepo.getCarByColor(carColor);
+    }
+
+    async getCarByYear(carYear) {
+        return await CarRepo.getCarByYear(carYear);
     }
 }
 

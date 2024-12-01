@@ -3,7 +3,6 @@ import rentalModel from '../models/rentalModel.js';
 
 class rentalRepo {
     async addRental(data) {
-        // Valida que los datos requeridos existan
         if (!data.clientId || !data.carId) {
             throw new Error('Missing required fields: clientId or carId');
         }
@@ -73,6 +72,24 @@ class rentalRepo {
     async getRentalsByCar(carId) {
         const query = await db.collection('rentals').where('carId', '==', carId).get();
         return query.docs.map((doc) =>
+            new rentalModel(
+                doc.id,
+                doc.data().clientId,
+                doc.data().carId,
+                doc.data().startDate,
+                doc.data().endDate,
+                doc.data().pickupAddress,
+                doc.data().dropoffAddress,
+                doc.data().paymentMethod,
+                doc.data().totalAmount,
+                doc.data().status
+            )
+        );
+    }
+
+    async getAllRentals() { // Add this function
+        const docs = await db.collection('rentals').get();
+        return docs.docs.map((doc) =>
             new rentalModel(
                 doc.id,
                 doc.data().clientId,
